@@ -1,4 +1,6 @@
 {
-  "description": "The Universal Subtitles jetpack extension",
-  "author": "Universal Subtitles (http://universalsubtitles.org)"
+    "id": "jid0-Y7ITD11P7fNBz9FqJ5ZI7b77lwM", 
+    "description": "The Universal Subtitles jetpack extension", 
+    "author": "Universal Subtitles (http://universalsubtitles.org)",
+    "dependencies": ["jetpack-core"]
 }
