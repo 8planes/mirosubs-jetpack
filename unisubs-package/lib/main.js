@@ -19,12 +19,13 @@
 const tabs = require("tabs");
 const simpleStorage = require("simple-storage");
 
-function onUnisubsExtensionLoaded(win) {
-    mirosubs.showExtension(simpleStorage.storage.enabled);
-}
-
-function onUnisubsExtensionToggled(enabled) {
-    simpleStorage.storage.enabled = enabled;
+function loadScript(doc, url) {
+    var head = doc.getElementsByTagName('head')[0];
+    var script = doc.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+    script.charset = 'UTF-8';
+    head.appendChild(script);
 }
 
 tabs.onReady.add(function(tab) {
@@ -32,13 +33,19 @@ tabs.onReady.add(function(tab) {
     var doc = tab.contentDocument;
     if (!win.jetpackMiroExtended) {
         win.jetpackMiroExtended = true;
-        win['onUnisubsExtensionLoaded'] = onUnisubsExtensionLoaded;
-        win['onUnisubsExtensionToggled'] = onUnisubsExtensionToggled;
-        var head = doc.getElementsByTagName('head')[0];
-        var widgetScript = doc.createElement('script');
-        widgetScript.type = 'text/javascript';
-        widgetScript.src = 'http://dev.universalsubtitles.org/site_media/js/mirosubs-extension.js';
-        widgetScript.charset = 'UTF-8';
-        head.appendChild(widgetScript);        
+        doc.addEventListener(
+            "MirosubsExtensionLoadedEvent",
+            function(e) {
+                e.target.setAttribute(
+                    'enabled', 
+                    simpleStorage.storage.enabled ? 'true' : 'false');
+            }, false, true);
+        doc.addEventListener(
+            "MirosubsExtensionToggledEvent",
+            function(e) {
+                simpleStorage.storage.enabled = 
+                    e.target.getAttribute('enabled') == 'true';
+            }, false, true);
+        loadScript(doc, 'http://dev.universalsubtitles.org/site_media/js/mirosubs-extension.js');
     }
 });
