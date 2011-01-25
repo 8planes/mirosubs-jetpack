@@ -46,6 +46,6 @@ tabs.onReady.add(function(tab) {
                 simpleStorage.storage.enabled = 
                     e.target.getAttribute('enabled') == 'true';
             }, false, true);
-        loadScript(doc, 'http://dev.universalsubtitles.org/site_media/js/mirosubs-extension.js');
+        loadScript(doc, 'http://s3.www.universalsubtitles.org/js/mirosubs-extension.js');
     }
 });
